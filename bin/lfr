@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'lfr'
+
+lfr = LFR::Interpreter.new
+
+if ARGV.size > 0
+  print lfr.run(File.read(ARGV[0]))
+else
+  lfr.repl
+end
