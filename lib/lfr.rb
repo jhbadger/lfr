@@ -57,7 +57,9 @@ module LFR
       elsif expr.is_a? Array
         fn, *rest = expr
         rest = rest.collect{|x| evaluate(x, environment)}
-        return environment[fn].call *rest
+        fn = environment[fn] if fn.is_a? Symbol
+        fn = evaluate(fn, environment) if fn.is_a? Array
+        return fn.call *rest
       elsif expr.is_a? Symbol
         environment[expr]
       end
