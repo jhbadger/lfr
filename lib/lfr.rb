@@ -43,6 +43,23 @@ module LFR
         evaluate([:define, name, [:lambda, var, expr]], environment)
       elsif expr[0] == :quote
         expr[1]
+      elsif expr[0] == :commaed
+        evaluate(expr[1], environment)
+      elsif expr[0] == :quasiquote
+        _, expr = expr
+        if expr.is_a? Array
+          result = []
+          expr.each do |item|
+            if item.is_a?(Array) && item[0] == :commaed
+              result.push evaluate(item, environment)
+            else
+              result.push item
+            end
+          end
+          return result
+        else
+          expr
+        end
       elsif expr[0] == :if
         _, test, opt1, opt2 = expr
         exp = evaluate(test, environment) ? opt1 : opt2

@@ -25,5 +25,5 @@
 (define max (ruby "|list| list.max"))
 (define min (ruby "|list| list.min"))
 (define length (ruby "|x| x.length"))
-(define print (ruby "|x| print x;x"))
+(define print (ruby "|x| print x"))
 (define range (ruby "|*x| if x[1].nil?;(1..x[0]).to_a;else (x[0]..x[1]).to_a;end"))

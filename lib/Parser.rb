@@ -38,7 +38,13 @@ module LFR
         elsif string[pos] == "'"
           tokens.push :q
           pos += 1
-        elsif string[pos] =~/\s|,/
+        elsif string[pos] == "`"
+          tokens.push :qq
+          pos += 1
+        elsif string[pos] == ","
+          tokens.push :cma
+          pos += 1
+        elsif string[pos] =~/\s/
           pos += 1
         else
           token = ""
@@ -54,6 +60,8 @@ module LFR
     def Parser.tokens2exps(tokens, idx = 0)
       parsed = []
       quoted = false
+      quasiquoted = false
+      commaed = false
       while idx < tokens.length
         token = tokens[idx]
         if token == :lp
@@ -64,10 +72,24 @@ module LFR
           quoted = true
           idx += 1
           next
+        elsif token == :qq
+          quasiquoted = true
+          idx += 1
+          next
+        elsif token == :cma
+          commaed = true
+          idx += 1
+          next
         end
         if quoted
           parsed.push [:quote, token]
           quoted = false
+        elsif quasiquoted
+          parsed.push [:quasiquote, token]
+          quasiquoted = false
+        elsif commaed
+          parsed.push [:commaed, token]
+          commaed = false
         else
           parsed.push token
         end
